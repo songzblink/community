@@ -12,3 +12,5 @@
 [Github OAuth 网页登录接入](https://docs.github.com/en/developers/apps/creating-an-oauth-app)
 ## 工具
 [Git](https://git-scm.com/download)
+
+[OkHttp](https://square.github.io/okhttp/) # java 进行 http 请求
