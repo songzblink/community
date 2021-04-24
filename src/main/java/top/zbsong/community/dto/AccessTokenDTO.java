@@ -1,4 +1,4 @@
-package top.zbsong.dto;
+package top.zbsong.community.dto;
 
 /**
  * Create By songzb on 2021/4/23

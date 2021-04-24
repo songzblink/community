@@ -1,11 +1,13 @@
 package top.zbsong.community.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import top.zbsong.community.dto.GithubUser;
 import top.zbsong.community.provider.GithubProvider;
-import top.zbsong.dto.AccessTokenDTO;
+import top.zbsong.community.dto.AccessTokenDTO;
 
 /**
  * Create By songzb on 2021/4/23
@@ -17,16 +19,24 @@ public class AuthorizeController {
     @Autowired
     GithubProvider githubProvider;
 
+    @Value("${github.client.id}")
+    private String clientId;
+    @Value("${github.client.secret}")
+    private String clientSecret;
+    @Value("${github.redirect.uri}")
+    private String redirectUri;
+
     @GetMapping("/callback")
-    public String callback(@RequestParam(name = "code") String code,
-                           @RequestParam(name = "state") String state) {
+    public String callback(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setClient_id("8f3c188a9891dd464883");
-        accessTokenDTO.setClient_secret("8a7b5524f513dc87171f55714dc963c070c70920 ");
+        accessTokenDTO.setClient_id(clientId);
+        accessTokenDTO.setClient_secret(clientSecret);
         accessTokenDTO.setCode(code);
-        accessTokenDTO.setRedirect_uri("http://localhost:8888/callback");
+        accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setState(state);
-        githubProvider.getAccessToken(accessTokenDTO);
+        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
+        GithubUser user = githubProvider.getUser(accessToken);
+        System.out.println(user.getName());
         return "index";
     }
 }
