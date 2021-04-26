@@ -1,9 +1,10 @@
-package top.zbsong.community.model;
+package top.zbsong.community.dto;
 
 import lombok.Data;
+import top.zbsong.community.model.User;
 
 @Data
-public class Question {
+public class QuestionDTO {
     private Integer id;
     private String title;
     private String description;
@@ -14,4 +15,5 @@ public class Question {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
+    private User user;
 }

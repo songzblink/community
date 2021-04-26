@@ -10,6 +10,7 @@ import top.zbsong.community.mapper.UserMapper;
 import top.zbsong.community.model.User;
 import top.zbsong.community.provider.GithubProvider;
 import top.zbsong.community.dto.AccessTokenDTO;
+import top.zbsong.community.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public class AuthorizeController {
     @Autowired
     GithubProvider githubProvider;
     @Autowired
-    UserMapper userMapper;
+    private UserService userService;
 
 
     @Value("${github.client.id}")
@@ -55,9 +56,8 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(System.currentTimeMillis());
-            userMapper.insert(user);
+            user.setAvatarUrl(githubUser.getAvatarUrl());
+            userService.createOrUpdate(user);
             // 3.将token放入cookie
             response.addCookie(new Cookie("token", token));
             return "redirect:/";
@@ -66,5 +66,14 @@ public class AuthorizeController {
 
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
