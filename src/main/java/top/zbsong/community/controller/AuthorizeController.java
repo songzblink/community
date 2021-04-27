@@ -63,7 +63,6 @@ public class AuthorizeController {
             return "redirect:/";
         } else {
             // 登陆失败
-
             return "redirect:/";
         }
     }
