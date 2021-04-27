@@ -28,9 +28,14 @@
    1. 从github获得用户信息
    2. 生成对应的token写入cookie和数据库
    3. 下次登录验证cookie
-4. 
-
-
+4. 实现登录状态持久化
+5. 完成文章发布功能
+6. 完成分页功能
+7. 拦截器实现
+8. 完成文章跟新功能
+9. mybatis generator 配置：命令`mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate`
+10. 通用处理异常问题以及白页问题
+11. 完成阅读数功能
 
 ### 脚本
 
@@ -76,5 +81,26 @@ comment on column QUESTION.COMMENT_COUNT is '评论数';
 comment on column QUESTION.VIEW_COUNT is '阅读数';
 comment on column QUESTION.LIKE_COUNT is '点赞数';
 comment on column QUESTION.TAG is '标签';
+```
+
+```mysql
+create table COMMENT
+(
+	ID BIGINT auto_increment,
+	PARENT_ID BIGINT not null,
+	TYPE INT,
+	COMMENTOR INT,
+	GMT_CREATE BIGINT,
+	GMT_MODIFIED BIGINT,
+	LIKE_COUNT BIGINT default 0,
+	constraint COMMENT_PK
+		primary key (ID)
+);
+comment on column COMMENT.PARENT_ID is '关联的question的id';
+comment on column COMMENT.TYPE is '父类类型';
+comment on column COMMENT.COMMENTOR is '评论人id';
+comment on column COMMENT.GMT_CREATE is '创建时间';
+comment on column COMMENT.GMT_MODIFIED is '修改时间';
+comment on column COMMENT.LIKE_COUNT is '点赞数';
 ```
 
