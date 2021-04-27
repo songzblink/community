@@ -33,7 +33,7 @@
 6. 完成分页功能
 7. 拦截器实现
 8. 完成文章跟新功能
-9. mybatis generator 配置：命令`mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate`
+9. mybatis generator 配置：命令`mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate`，覆盖式
 10. 通用处理异常问题以及白页问题
 11. 完成阅读数功能
 
