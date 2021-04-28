@@ -11,6 +11,15 @@
 
 </head>
 <body>
+<script type="application/javascript">
+    window.onload = function () {
+        var closeable = window.localStorage.getItem("closeable");
+        if (closeable == "true") {
+            window.close();
+            window.localStorage.removeItem("closeable");
+        }
+    }
+</script>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main">
     <div class="row">
@@ -25,7 +34,8 @@
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading">
-                        <a th:href="@{'/question/' + ${question.id}(page=${pagination.currentPage + 1})}" th:text="${question.title}"></a>
+                        <a th:href="@{'/question/' + ${question.id}(page=${pagination.currentPage + 1})}"
+                           th:text="${question.title}"></a>
                     </h4>
                     <span th:text="${question.description}"></span><span class="text-desc">• [[${question.commentCount}]] 个回复 • [[${question.viewCount}]] 次浏览 • [[${#dates.format(question.gmtModified,'yyyy-MM-dd HH:mm')}]]</span>
                 </div>
@@ -42,7 +52,9 @@
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
-                    <li th:each="page : ${pagination.pages}" th:class="${pagination.currentPage == page} ? 'active' : ''"><a th:href="@{/(page=${page})}">[[${page}]]</a></li>
+                    <li th:each="page : ${pagination.pages}"
+                        th:class="${pagination.currentPage == page} ? 'active' : ''"><a th:href="@{/(page=${page})}">[[${page}]]</a>
+                    </li>
 
                     <li th:if="${pagination.showNext}">
                         <a aria-label="Next" th:href="@{/(page=${pagination.currentPage + 1})}">

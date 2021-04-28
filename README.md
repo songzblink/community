@@ -13,6 +13,8 @@
 
 [thymeleaf 文档](https://www.thymeleaf.org/)
 
+[jQuery API Documentation](https://api.jquery.com/)
+
 ## 工具
 [Git](https://git-scm.com/download)
 
@@ -36,34 +38,38 @@
 9. mybatis generator 配置：命令`mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate`，覆盖式
 10. 通用处理异常问题以及白页问题
 11. 完成阅读数功能
+12. 完成评论接口以及异常处理
+13. 添加事务
 
 ### 脚本
 
 ```mysql
 create table USER
 (
-	ID INT auto_increment,
+	ID BIGINT auto_increment,
 	ACCOUNT_ID VARCHAR(100),
 	NAME VARCHAR(50),
 	TOKEN CHAR(36),
 	GMT_CREATE BIGINT,
 	GMT_MODIFIED BIGINT,
+	AVATAR_URL VARCHAR(100),
 	constraint USER_PK
 		primary key (ID)
 );
 comment on column USER.GMT_CREATE is '格林威治时间gmt';
 comment on column USER.GMT_MODIFIED is '格林威治时间gmt';
+comment on column USER.AVATAR_URL is '头像';
 ```
 
 ```mysql
 create table QUESTION
 (
-	ID INT auto_increment,
+	ID BIGINT auto_increment,
 	TITLE VARCHAR(50),
 	DESCRIPTION TEXT,
 	GMT_CREATE BIGINT,
 	GMT_MODIFIED BIGINT,
-	CREATOR INT,
+	CREATOR BIGINT,
 	COMMENT_COUNT INT default 0,
 	VIEW_COUNT INT default 0,
 	LIKE_COUNT INT default 0,
@@ -89,18 +95,25 @@ create table COMMENT
 	ID BIGINT auto_increment,
 	PARENT_ID BIGINT not null,
 	TYPE INT,
-	COMMENTOR INT,
+	COMMENTATOR BIGINT,
 	GMT_CREATE BIGINT,
 	GMT_MODIFIED BIGINT,
 	LIKE_COUNT BIGINT default 0,
+	CONTENT VARCHAR(1024),
 	constraint COMMENT_PK
 		primary key (ID)
 );
 comment on column COMMENT.PARENT_ID is '关联的question的id';
 comment on column COMMENT.TYPE is '父类类型';
-comment on column COMMENT.COMMENTOR is '评论人id';
+comment on column COMMENT.COMMENTATOR is '评论人id';
 comment on column COMMENT.GMT_CREATE is '创建时间';
 comment on column COMMENT.GMT_MODIFIED is '修改时间';
 comment on column COMMENT.LIKE_COUNT is '点赞数';
+comment on column COMMENT.CONTENT is '评论';
 ```
 
+
+
+## 遇到的问题
+
+1.数据库设计不合理（用户ID类型），修改数据库导致需要修改大量代码。数据库设计的合理性很重要。
