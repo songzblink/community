@@ -10,7 +10,6 @@ function post() {
             "type": 1
         }),
         success: function (response) {
-            console.log(response);
             if (response.code == 200) {
                 $("#comment_section").hide();
             } else {
