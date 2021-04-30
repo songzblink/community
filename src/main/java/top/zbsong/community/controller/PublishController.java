@@ -1,5 +1,6 @@
 package top.zbsong.community.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import top.zbsong.community.cache.TagCache;
 import top.zbsong.community.dto.QuestionDTO;
 import top.zbsong.community.mapper.UserMapper;
 import top.zbsong.community.model.Question;
@@ -31,11 +33,14 @@ public class PublishController {
         model.addAttribute("tag", question.getTag());
         // 标记当前是在修改
         model.addAttribute("id", question.getId());
+
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -48,7 +53,7 @@ public class PublishController {
             HttpServletRequest request,
             Model model
     ) {
-
+        model.addAttribute("tags", TagCache.get());
         // 3.验证是否登录
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
@@ -73,6 +78,13 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
+
+        String invalid = TagCache.filterInvalid(tag);
+        if (StringUtils.isNotBlank(invalid)) {
+            model.addAttribute("error", "输入非法标签：" + invalid);
+            return "publish";
+        }
+
         // 4.填充question并插入到数据库
         Question question = new Question();
         question.setTitle(title);

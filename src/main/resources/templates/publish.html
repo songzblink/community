@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/community.css"/>
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="../js/community.js"></script>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
@@ -20,21 +21,46 @@
                 <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）</label>
-                    <input type="text" name="title" class="form-control" th:value="${title}" id="title" placeholder="问题标题...">
+                    <input type="text" name="title" class="form-control" th:value="${title}" id="title"
+                           placeholder="问题标题..." autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="title">问题补充（必填，请参照右侧提示）：</label>
-                    <textarea name="description" class="form-control" th:text="${description}" id="description" cols="30" rows="10"></textarea>
+                    <textarea name="description" class="form-control" th:text="${description}" id="description"
+                              cols="30" rows="10"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="title">添加标签</label>
-                    <input type="text" name="tag" class="form-control" th:value="${tag}" id="tag" placeholder="输入标签，以“,“分割">
+                    <input type="text" name="tag" class="form-control" th:value="${tag}" id="tag"
+                           placeholder="输入标签，以“,“分割" autocomplete="off" onclick="showSelectTag()">
+                    <div>
+
+                        <div id="select-tag" class="publish-tag-tab">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" th:each="selectCategory, selectCategoryStat : ${tags}" th:class="${selectCategoryStat.first ? 'active' : ''}">
+                                    <a th:href="${'#' + selectCategory.categoryName}" aria-controls="home" role="tab" data-toggle="tab" th:text="${selectCategory.categoryName}"></a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane" th:id="${selectCategory.categoryName}" th:each="selectCategory : ${tags}" th:class="${selectCategoryStat.first ? 'active tab-pane' : 'tab-pane'}">
+                                    <span>
+                                        <span class="label label-info" th:each="selectTag : ${selectCategory.tags}" th:onclick="selectTag([[${selectTag}]])"   ><span class="glyphicon glyphicon-tags" th:text="'  ' +${selectTag}"></span></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="container-fluid main">
                     <div class="row">
                         <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error != null}">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
                             <strong>Warning!</strong><span th:text="${error}"></span>
                         </div>
                         <button type="submit" class="btn btn-info btn-publish">发布</button>

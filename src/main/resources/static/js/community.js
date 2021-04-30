@@ -105,5 +105,21 @@ function collapseComments(e) {
         }
         comments.addClass("in");
     }
+}
 
+function showSelectTag() {
+    $("#select-tag").show();
+}
+
+function selectTag(value) {
+
+    var previous = $("#tag").val();
+
+    if (previous) {
+        if (previous.split(",").indexOf(value, 0) == -1) {
+            $("#tag").val(previous + ',' + value);
+        }
+    } else {
+        $("#tag").val(value);
+    }
 }
