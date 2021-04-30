@@ -43,6 +43,7 @@
 14. 完成二级回复
 15. 完成tag的正则匹配查询相关问题
 16. 后端校验以规范标签tag
+17. 添加回复通知功能
 
 ### 脚本
 
@@ -125,6 +126,8 @@ create table NOTIFICATION
 	TYPE INT not null,
 	GMT_CREATE BIGINT not null,
 	STATUS INT default 0 not null,
+	NOTIFIER_NAME VARCHAR(100),
+	OUTER_TITLE VARCHAR(256),
 	constraint NOTIFICATION_PK
 		primary key (ID)
 );
@@ -133,6 +136,7 @@ comment on column NOTIFICATION.RECEIVER is '接收消息的人';
 comment on column NOTIFICATION.OUTER_ID is '问题或者回复的id';
 comment on column NOTIFICATION.TYPE is '类型：评论或者回复';
 comment on column NOTIFICATION.STATUS is '已读标记：0未读 1已读';
+comment on column NOTIFICATION.NOTIFIER_NAME is '发出消息的人的名字';
 ```
 
 

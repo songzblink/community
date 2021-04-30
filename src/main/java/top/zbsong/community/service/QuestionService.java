@@ -45,7 +45,7 @@ public class QuestionService {
 
         // 计算真正的偏移地址
         Integer offset = (page - 1) * size;
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
 
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
@@ -58,7 +58,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         paginationDTO.setPagination(totalCount, page, size);
 
         return paginationDTO;
@@ -93,7 +93,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         paginationDTO.setPagination(totalCount, page, size);
 
         return paginationDTO;

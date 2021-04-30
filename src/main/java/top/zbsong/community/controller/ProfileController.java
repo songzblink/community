@@ -10,6 +10,7 @@ import top.zbsong.community.dto.PaginationDTO;
 import top.zbsong.community.mapper.QuestionMapper;
 import top.zbsong.community.mapper.UserMapper;
 import top.zbsong.community.model.User;
+import top.zbsong.community.service.NotificationService;
 import top.zbsong.community.service.QuestionService;
 
 import javax.servlet.http.Cookie;
@@ -23,6 +24,9 @@ public class ProfileController {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action") String action, HttpServletRequest request, Model model, @RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "5") Integer size) {
         // 1.验证是否登录
@@ -35,14 +39,21 @@ public class ProfileController {
         if ("questions".equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
+            // 查询数据库，返回问题列表信息
+            PaginationDTO paginationDTO = questionService.listByUserId(user.getId(), page, size);
+            model.addAttribute("pagination", paginationDTO);
         } else if ("replies".equals(action)) {
+            PaginationDTO paginationDTO = notificationService.list(user.getId(), page, size);
+            Long unreadCount = notificationService.unreadCount(user.getId());
+
+
+            model.addAttribute("pagination", paginationDTO);
             model.addAttribute("section", "replies");
+            model.addAttribute("unreadCount", unreadCount);
             model.addAttribute("sectionName", "最新回复");
         }
 
-        // 查询数据库，返回问题列表信息
-        PaginationDTO pagination = questionService.listByUserId(user.getId(), page, size);
-        model.addAttribute("pagination", pagination);
+
         return "profile";
     }
 }
