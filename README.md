@@ -80,8 +80,6 @@ create table QUESTION
 	constraint QUESTION_PK
 		primary key (ID)
 );
-
-comment on column QUESTION.ID is '文章id';
 comment on column QUESTION.TITLE is '文章标题';
 comment on column QUESTION.GMT_CREATE is '创建时间';
 comment on column QUESTION.GMT_MODIFIED is '修改时间';
@@ -103,6 +101,7 @@ create table COMMENT
 	GMT_MODIFIED BIGINT,
 	LIKE_COUNT BIGINT default 0,
 	CONTENT VARCHAR(1024),
+	COMMENT_COUNT INT default 0,
 	constraint COMMENT_PK
 		primary key (ID)
 );
@@ -113,6 +112,27 @@ comment on column COMMENT.GMT_CREATE is '创建时间';
 comment on column COMMENT.GMT_MODIFIED is '修改时间';
 comment on column COMMENT.LIKE_COUNT is '点赞数';
 comment on column COMMENT.CONTENT is '评论';
+comment on column COMMENT.COMMENT_COUNT is '评论数';
+```
+
+```mysql
+create table NOTIFICATION
+(
+	ID BIGINT auto_increment,
+	NOTIFIER BIGINT not null,
+	RECEIVER BIGINT not null,
+	OUTER_ID BIGINT not null,
+	TYPE INT not null,
+	GMT_CREATE BIGINT not null,
+	STATUS INT default 0 not null,
+	constraint NOTIFICATION_PK
+		primary key (ID)
+);
+comment on column NOTIFICATION.NOTIFIER is '发出消息的人';
+comment on column NOTIFICATION.RECEIVER is '接收消息的人';
+comment on column NOTIFICATION.OUTER_ID is '问题或者回复的id';
+comment on column NOTIFICATION.TYPE is '类型：评论或者回复';
+comment on column NOTIFICATION.STATUS is '已读标记：0未读 1已读';
 ```
 
 
