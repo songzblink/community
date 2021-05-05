@@ -15,6 +15,8 @@
 
 [jQuery API Documentation](https://api.jquery.com/)
 
+[Markdown 插件](https://pandao.github.io/editor.md/)
+
 ## 工具
 [Git](https://git-scm.com/download)
 
@@ -44,6 +46,9 @@
 15. 完成tag的正则匹配查询相关问题
 16. 后端校验以规范标签tag
 17. 添加回复通知功能
+18. 添加markdown支持
+19. 腾讯云COS上传图片支持（蛮贵的，建议去掉直接让他去找图床上传自己的图片）
+20. sql实现搜索功能
 
 ### 脚本
 

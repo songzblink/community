@@ -48,6 +48,7 @@ public class NotificationService {
 
         NotificationExample example = new NotificationExample();
         example.createCriteria().andReceiverEqualTo(userId);
+        example.setOrderByClause("gmt_create desc");
         List<Notification> notifications = notificationMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
 
 
@@ -76,7 +77,13 @@ public class NotificationService {
         return notificationMapper.countByExample(notificationExample);
     }
 
+    /**
+     * @param id   通知的id（主键）
+     * @param user
+     * @return
+     */
     public NotificationDTO read(Long id, User user) {
+        // 查询数据库找到该条通知
         Notification notification = notificationMapper.selectByPrimaryKey(id);
         if (notification.getReceiver() == null) {
             throw new CustomizeException(CustomizeErrorCode.NOTIFICATION_NOT_FOUND);
@@ -84,6 +91,7 @@ public class NotificationService {
         if (!notification.getReceiver().equals(user.getId())) {
             throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAIL);
         }
+        // 设置已读并更新
         notification.setStatus(NotificationStatusEnum.READ.getStatus());
         notificationMapper.updateByPrimaryKey(notification);
 

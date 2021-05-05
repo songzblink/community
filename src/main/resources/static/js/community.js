@@ -32,7 +32,6 @@ function comment2target(targetId, type, content) {
                 // 回复成功后刷新页面
                 window.location.reload();
             } else {
-                alert(response.message);
                 if (response.code == 2003) {
                     var isAccepted = confirm(response.message);
                     if (isAccepted) {

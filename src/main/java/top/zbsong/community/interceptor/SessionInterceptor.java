@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import top.zbsong.community.mapper.UserMapper;
 import top.zbsong.community.model.User;
 import top.zbsong.community.model.UserExample;
+import top.zbsong.community.service.NotificationService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,9 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -31,6 +35,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                     List<User> userList = userMapper.selectByExample(userExample);
                     if (userList.size() == 1) {
                         request.getSession().setAttribute("user", userList.get(0));
+
+                        Long unreadCount = notificationService.unreadCount(userList.get(0).getId());
+                        request.getSession().setAttribute("unreadCount", unreadCount);
                     }
                     break;
                 }

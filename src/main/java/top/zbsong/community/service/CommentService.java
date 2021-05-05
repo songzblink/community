@@ -75,7 +75,9 @@ public class CommentService {
             commentExtMapper.incCommentCount(parentComment);
 
             // 通知
-            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT.getType(), dbComment.getId());
+            // 这里取巧，notification里并没有直接指向回复的具体评论，而是指向问题的id
+            // 如果需要找到回复的具体评论的功能时，再改回来。
+            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT.getType(), question.getId());
         } else {
             // 回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -93,6 +95,10 @@ public class CommentService {
     }
 
     private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, int notificationType, Long outerId) {
+        // 不应该提醒自己回复了自己
+        if (receiver.equals(comment.getCommentator())) {
+            return;
+        }
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(notificationType);

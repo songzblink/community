@@ -58,6 +58,7 @@ body {
 .publish-tag-tab .label-info {
     margin-right: 10px;
 }
+
 .question-related {
     line-height: 20px;
     font-size: 12px;
@@ -133,4 +134,9 @@ body {
 
 .menu .icon:hover {
     color: #499ef3;
+}
+
+.footer {
+    padding: 10px 25%;
+    color: #666666;
 }
