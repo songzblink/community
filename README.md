@@ -170,3 +170,88 @@ yum update
 yum install git
 ```
 
+#### 1.3 在root目录下创建项目环境
+
+在 root 目录下创建 App 文件夹
+
+```shell
+mkdir App
+cd App
+```
+
+克隆项目到 App 文件夹
+
+```shell
+git clone https://github.com/songzblink/community.git
+```
+
+安装 maven
+
+```shell
+yum install maven
+```
+
+检查是否安装成功
+
+```shell
+mvn -v
+```
+
+修改 maven 源为国内镜像，通过 `mvn -v` 找到 maven 的安装地址，然后打开 conf 目录中找到 settings.xml 文件，在 `<mirrors>` 标签下添加以下内容：
+
+```xml
+<mirror>  
+    <id>nexus-aliyun</id>  
+    <mirrorOf>central</mirrorOf>    
+    <name>Nexus aliyun</name>  
+    <url>http://maven.aliyun.com/nexus/content/groups/public</url>  
+</mirror>
+```
+
+编译打包项目
+
+```shell
+mvn clean compile package
+```
+
+**问题**
+
+出现错误：
+
+```
+The plugin org.apache.maven.plugins:maven-resources-plugin:3.2.0 requires Maven version 3.1.0
+```
+
+解决方法：在 pom.xml 中添加 `<plugins>` 标签下添加下面代码，修改 maven 版本号
+
+```xml
+<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+</plugin>
+```
+
+### 2. 修改相关配置
+
+复制一份配置文件，命名为 application-production.properties，目的是创建一份实际部署使用到的 profile 配置文件。使用的时候可以通过[三种方式去激活 profile](https://blog.csdn.net/iteye_8208/article/details/82680632)。
+
+```shell
+cp src/main/resources/application.properties  src/main/resources/application-production.properties
+```
+
+重新打包项目
+
+```shell
+mvn package
+```
+
+### 3. 启动项目
+
+激活 production 的 profile，并启动项目
+
+```shell
+java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar 
+```
+
+这个时候已经可以通过访问服务器的公网 ip 来访问项目的主页。
