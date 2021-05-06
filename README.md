@@ -149,3 +149,24 @@ comment on column NOTIFICATION.NOTIFIER_NAME is '发出消息的人的名字';
 ## 遇到的问题
 
 1.数据库设计不合理（用户ID类型），修改数据库导致需要修改大量代码。数据库设计的合理性很重要。
+
+
+
+
+
+## 部署
+
+### 1.部署依赖
+
+#### 1.1 更新仓库
+
+```shell
+yum update
+```
+
+#### 1.2 安装git
+
+```
+yum install git
+```
+
