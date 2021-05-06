@@ -255,3 +255,11 @@ java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.ja
 ```
 
 这个时候已经可以通过访问服务器的公网 ip 来访问项目的主页。
+
+### 4. 关闭项目
+
+```shell
+ps -aux | grep java
+```
+
+然后 kill 对应的进程。
